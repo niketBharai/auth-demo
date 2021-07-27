@@ -8,11 +8,13 @@
   height: 100vh;
 }
 
-.main {
-  padding: 5rem 0;
-  flex: 1;
+.btnContainer {
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  padding: 6px 13px;
+  cursor: pointer;
+  font-size: 16px;
+  outline: none;
+}
+.svgIcon {
+  margin-right: 10px;
 }
