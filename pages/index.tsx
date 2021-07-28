@@ -1,12 +1,34 @@
 import Head from "next/head";
 import Image from "next/image";
+import firebase from "firebase/app";
+import { useState } from "react";
 import styles from "../styles/Home.module.css";
 import config from "../firebase";
 import btn from "../public/btn_google_signin_dark_pressed_web.png";
+import "firebase/auth";
 
 const Home = () => {
+  const [email, setEmail] = useState("");
+
   const googleLogin = () => {
-    console.log("HELLO");
+    const googleProvider = new firebase.auth.GoogleAuthProvider();
+
+    config
+      .auth()
+      .signInWithPopup(googleProvider)
+      .then((res: any) => {
+        console.log("res :", res);
+
+        const userEmail = res.additionalUserInfo.profile.email;
+        setEmail(userEmail);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const logoutHandler = () => {
+    setEmail("");
   };
 
   return (
@@ -17,12 +39,23 @@ const Home = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <Image
-        src={btn}
-        alt="login"
-        className={styles.img}
-        onClick={googleLogin}
-      />
+      {!email && (
+        <Image
+          src={btn}
+          alt="login"
+          className={styles.img}
+          onClick={googleLogin}
+        />
+      )}
+
+      {email && (
+        <div>
+          <h4>Hello There, {email} logged in successfully.</h4>
+          <button className={styles.logout} onClick={logoutHandler}>
+            Logout
+          </button>
+        </div>
+      )}
     </div>
   );
 };
